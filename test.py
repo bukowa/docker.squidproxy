@@ -1,5 +1,8 @@
 import http.client
 import base64
+import sys
+
+num_retry = 3
 
 proxy_host = 'localhost'
 proxy_port = 3128
@@ -11,29 +14,48 @@ password = 'DEFAULT_PASSWORD'
 credentials = f'{username}:{password}'
 encoded_credentials = base64.b64encode(credentials.encode('ascii')).decode('ascii')
 
-# Establish a connection to the proxy server
-conn = http.client.HTTPConnection(proxy_host, proxy_port)
-
-# Set the proxy authentication
-conn.set_tunnel(destination_host, headers={"Proxy-Authorization": f"Basic {encoded_credentials}"})
+# Retry the request if it fails
+current_retry = 0
 
 # Send the request
-conn.request('GET', destination_path)
+while current_retry < num_retry:
 
-# Get the response from the server
-response = conn.getresponse()
+    # Establish a connection to the proxy server
+    conn = http.client.HTTPConnection(proxy_host, proxy_port)
 
-# Read the response content
-content = response.read()
+    # Set the proxy authentication
+    conn.set_tunnel(destination_host, headers={"Proxy-Authorization": f"Basic {encoded_credentials}"})
 
-# Assert the response status code
-assert response.status == 200, f"HTTP Error: {response.status} {response.reason}"
+    try:
+        print(f"Sending the request to {destination_host}")
+        conn.request('GET', destination_path)
+    except Exception as e:
+        print(f"Failed to send the request: {e}")
+        current_retry += 1
+        continue
+    else:
+        # Get the response from the server
+        response = conn.getresponse()
 
-# Print the response content
-print(content)
+        # Read the response content
+        content = response.read()
 
-# Make sure "<title>Example Domain</title>" is in the response content
-assert b"<title>Example Domain</title>" in content
+        # Assert the response status code
+        assert response.status == 200, f"HTTP Error: {response.status} {response.reason}"
 
-# Close the connection
-conn.close()
+        # Print the response content
+        print(content)
+
+        # Make sure "<title>Example Domain</title>" is in the response content
+        assert b"<title>Example Domain</title>" in content
+
+        # Close the connection
+        conn.close()
+
+        # Print success message
+        print("Success")
+        sys.exit(0)
+
+# Print failure message
+print("Failed")
+sys.exit(1)
