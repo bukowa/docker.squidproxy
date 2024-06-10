@@ -1,8 +1,9 @@
 import http.client
 import base64
 import sys
+import time
 
-num_retry = 3
+time_allowed_running = 10
 
 proxy_host = 'localhost'
 proxy_port = 3128
@@ -14,11 +15,11 @@ password = 'DEFAULT_PASSWORD'
 credentials = f'{username}:{password}'
 encoded_credentials = base64.b64encode(credentials.encode('ascii')).decode('ascii')
 
-# Retry the request if it fails
-current_retry = 0
+# Start counting the time
+start = time.time()
 
-# Send the request
-while current_retry < num_retry:
+# If more than 'time_allowed_running' seconds have passed, exit
+while time.time() - start < time_allowed_running:
 
     # Establish a connection to the proxy server
     conn = http.client.HTTPConnection(proxy_host, proxy_port)
@@ -31,7 +32,6 @@ while current_retry < num_retry:
         conn.request('GET', destination_path)
     except Exception as e:
         print(f"Failed to send the request: {e}")
-        current_retry += 1
         continue
     else:
         # Get the response from the server
