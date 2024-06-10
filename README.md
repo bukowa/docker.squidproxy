@@ -10,7 +10,6 @@ docker run -d \
   -e SQUID_PASS=admin \
   bukowa/squidproxy
 ```
-![Docker Image Size](https://img.shields.io/docker/image-size/bukowa/squidproxy/latest)
-![Docker Image Version](https://img.shields.io/docker/v/bukowa/squidproxy)
-![Docker Pulls](https://img.shields.io/docker/pulls/bukowa/squidproxy)
-1
+[![Docker Image Size](https://img.shields.io/docker/image-size/bukowa/squidproxy/latest)](https://hub.docker.com/r/bukowa/squidproxy)
+[![Docker Image Version](https://img.shields.io/docker/v/bukowa/squidproxy)](https://hub.docker.com/r/bukowa/squidproxy)
+[![Docker Pulls](https://img.shields.io/docker/pulls/bukowa/squidproxy)](https://hub.docker.com/r/bukowa/squidproxy)
