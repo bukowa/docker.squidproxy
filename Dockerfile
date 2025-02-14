@@ -1,4 +1,4 @@
-FROM alpine@sha256:b89d9c93e9ed3597455c90a0b88a8bbb5cb7188438f70953fede212a0c4394e0
+FROM alpine@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c
 
 LABEL org.opencontainers.image.source=https://github.com/bukowa/docker.squidproxy
 LABEL org.opencontainers.image.licenses=MIT
